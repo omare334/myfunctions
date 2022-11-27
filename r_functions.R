@@ -50,3 +50,25 @@ function(x){
   qqline(x, col = "steelblue", lwd = 2)
   return(plotofx)
 }
+#finding confidence interval for binomial T=case F=no case
+function(df, die){
+  ci <- NULL
+  if(die) {
+    table<-df %>% table() %>% data.frame ()
+    ci<-prop.test(x= table [2,2], n=(length(df)), conf.level=.95, correct=FALSE)
+  } else {
+    table<-df %>% table() %>% data.frame ()
+    ci<-prop.test(x= table [1,2], n=(length(df)), conf.level=.95, correct=FALSE)
+  }
+  return(ci)
+}
+#risk difference calculation 
+function(x,y){
+  t<-table(x,y) %>% data.frame ()
+  a<-t[3,3]
+  b<-t[4,3]
+  no<-t[1,3]+t[3,3]
+  n1<-t[2,3]+t[4,3]
+  exposed<-riskdifference(a, b, no, n1, CRC=TRUE, conf.level=0.95)
+  return(exposed)
+}
